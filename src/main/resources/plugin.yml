@@ -1,3 +1,16 @@
 name: gotItems
-main: gotItem
+main: GotItem.GotItem
 version: 0.1
+commands:
+  completeChallenge:
+    description: Attempts to complete a quest, will remove items from your inventory
+    usage: "Usage: /completeChallenge"
+  listCompletions:
+    description: Lists players that have completed the challenge
+    usage: "Usage: /listCompletions"
+  removePlayer:
+    description: Removes a player from the list people who completed the challenge.
+    usage: "Usage: /removePlayer <player>"
+  forceCompletion:
+    description: Force completion of the objective for a player.
+    usage: "Usage: /forceCompletion <player>"

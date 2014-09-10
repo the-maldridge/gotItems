@@ -1,5 +1,5 @@
 
-package GotItem;
+package maldridge.FetchQuest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,22 +10,22 @@ import org.bukkit.entity.Player;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
-public final class GotItem extends JavaPlugin {
+public final class FetchQuest extends JavaPlugin {
     List<String> solvedQuest = new ArrayList<String>();
 
     @Override
     public void onEnable() {
-	getLogger().info("Enabling GotItem");
+	getLogger().info("Enabling FetchQuest");
     }
  
     @Override
     public void onDisable() {
-	getLogger().info("Disabling GotItem");
+	getLogger().info("Disabling FetchQuest");
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-	if(cmd.getName().equalsIgnoreCase("completeChallenge")) {
+	if(cmd.getName().equalsIgnoreCase("completeQuest")) {
 	    if(sender instanceof Player) {
 		Player player = (Player)sender;
 		solvedQuest.add(player.getName());

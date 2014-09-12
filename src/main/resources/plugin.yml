@@ -1,6 +1,6 @@
 name: FetchQuest
 main: maldridge.FetchQuest.FetchQuest
-version: 0.2
+version: 0.3
 commands:
   completeQuest:
     description: Attempts to complete a quest, will remove items from your inventory

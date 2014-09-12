@@ -1,5 +1,5 @@
 name: FetchQuest
-main: maldridge.FetchQuest
+main: maldridge.FetchQuest.FetchQuest
 version: 0.1
 commands:
   completeQuest:

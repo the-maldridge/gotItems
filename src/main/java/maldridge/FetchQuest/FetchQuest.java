@@ -13,10 +13,13 @@ import org.bukkit.command.CommandSender;
 
 public final class FetchQuest extends JavaPlugin {
     List<String> solvedQuest = new ArrayList<String>();
+    List<String> questItems = new ArrayList<String>();
 
     @Override
     public void onEnable() {
 	getLogger().info("Enabling FetchQuest");
+	questItems = this.getConfig().getStringList("thingsToGet");
+        getLogger().info("Must get a " + questItems);
     }
  
     @Override
@@ -29,28 +32,56 @@ public final class FetchQuest extends JavaPlugin {
 	if(cmd.getName().equalsIgnoreCase("completeQuest")) {
 	    if(sender instanceof Player) {
 		Player player = (Player)sender;
-		player.sendMessage("item status" + player.getInventory().contains(Material.STONE));
-		if(player.getInventory().contains(Material.STONE)) {
+		boolean hasItems = true;
+		boolean alreadySolved = false;
+
+		for(int i=0; i<questItems.size(); i++) {
+		    if(!player.getInventory().contains(Material.getMaterial(questItems.get(i)))) {
+			//player did not have the specified item, set the flag and break
+			hasItems = false;
+			player.sendMessage("It looks like you don't have any " + questItems.get(i) + " with you.");
+			break;
+		    } // otherwise keep checking
+		}
+		
+		//see if they already solved the quest
+		for(int i=0; i<solvedQuest.size(); i++) {
+		    if(solvedQuest.get(i) == player.getName()) {
+			sender.sendMessage("You've already solved the quest!");
+			alreadySolved = true;
+		    }
+		}
+
+		//if the two conditions have been met, then score them for the challenge
+		if(hasItems && !alreadySolved) {
 		    solvedQuest.add(player.getName());
 		    player.sendMessage("You have completed the quest!");
-		} else {
-		    player.sendMessage("It doesn't look like you have the right item with you!");
 		}
+
+		//we've made it this far and so all the checks have run without error
+		//go ahead and signal command success
 		return true;
+
 	    } else {
+		//only players can solve the quest
 		sender.sendMessage("You must be a player!");
 		return false;
 	    }
+	    //======================================================================================
 	} else if(cmd.getName().equalsIgnoreCase("listCompletions")) {
 	    if(solvedQuest.size() != 0) {
 		sender.sendMessage("The following people have completed the challenge:");
+
+		//show completions in order
 		for(int i=0; i<solvedQuest.size(); i++) {
 		    sender.sendMessage(i+1 +": "+solvedQuest.get(i));
 		}
 	    } else {
+		//don't show the list if no one has solved it yet
 		sender.sendMessage("No one has completed the challenge yet");
 	    }
 	    return true;
+	    //======================================================================================
 	} else if(cmd.getName().equalsIgnoreCase("removePlayer")) {
 	    if((args != null) && (args.length == 1)) {
 		Player target = this.getServer().getPlayer(args[0]);
@@ -69,8 +100,10 @@ public final class FetchQuest extends JavaPlugin {
 		    }
 		    return true; //checked and user was either removed or not present
 		}
+	    } else {
+		return false; //wrong number of operands
 	    }
-	    return false; //wrong number of commands or serious error
+	    //======================================================================================
 	} else if(cmd.getName().equalsIgnoreCase("forceCompletion")) {
 	    if((args != null) && (args.length == 1)) {
 		Player target = this.getServer().getPlayer(args[0]);
@@ -84,8 +117,9 @@ public final class FetchQuest extends JavaPlugin {
 		}
 	    }
 	    return false; // could not force completion
+	} else {
+	    return false; //no command matched
 	}
-	return false; //no command matched
     }
     
 }

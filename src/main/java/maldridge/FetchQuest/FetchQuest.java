@@ -7,6 +7,7 @@ import java.util.Iterator;
 
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.entity.Player;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
@@ -28,8 +29,13 @@ public final class FetchQuest extends JavaPlugin {
 	if(cmd.getName().equalsIgnoreCase("completeQuest")) {
 	    if(sender instanceof Player) {
 		Player player = (Player)sender;
-		solvedQuest.add(player.getName());
-		player.sendMessage("You have completed the quest!");
+		player.sendMessage("item status" + player.getInventory().contains(Material.STONE));
+		if(player.getInventory().contains(Material.STONE)) {
+		    solvedQuest.add(player.getName());
+		    player.sendMessage("You have completed the quest!");
+		} else {
+		    player.sendMessage("It doesn't look like you have the right item with you!");
+		}
 		return true;
 	    } else {
 		sender.sendMessage("You must be a player!");

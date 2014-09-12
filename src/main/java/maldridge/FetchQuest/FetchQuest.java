@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.ChatColor;
 
 public final class FetchQuest extends JavaPlugin {
     List<String> solvedQuest = new ArrayList<String>();
@@ -39,7 +40,7 @@ public final class FetchQuest extends JavaPlugin {
 		    if(!player.getInventory().contains(Material.getMaterial(questItems.get(i)))) {
 			//player did not have the specified item, set the flag and break
 			hasItems = false;
-			player.sendMessage("It looks like you don't have any " + questItems.get(i) + " with you.");
+			player.sendMessage(ChatColor.YELLOW + "It looks like you don't have any " + questItems.get(i) + " with you.");
 			break;
 		    } // otherwise keep checking
 		}
@@ -55,7 +56,7 @@ public final class FetchQuest extends JavaPlugin {
 		//if the two conditions have been met, then score them for the challenge
 		if(hasItems && !alreadySolved) {
 		    if(solvedQuest.size() == 0) {
-			this.getServer().broadcastMessage("Player " + player.getName() + " has completed the quest and won the prize!");
+			this.getServer().broadcastMessage(ChatColor.GREEN + "Player " + player.getName() + " has completed the quest and won the prize!");
 		    }
 		    solvedQuest.add(player.getName());
 		    player.sendMessage("You have completed the quest!");
@@ -77,7 +78,7 @@ public final class FetchQuest extends JavaPlugin {
 
 		//show completions in order
 		for(int i=0; i<solvedQuest.size(); i++) {
-		    sender.sendMessage(i+1 +": "+solvedQuest.get(i));
+		    sender.sendMessage(i+1 + ": " + ChatColor.BOLD + solvedQuest.get(i));
 		}
 	    } else {
 		//don't show the list if no one has solved it yet
@@ -105,7 +106,8 @@ public final class FetchQuest extends JavaPlugin {
 			return true; //checked and user was either removed or not present
 		    }		       
 		} else {
-		    sender.sendMessage("You don't have that permission!");
+		    sender.sendMessage(ChatColor.RED + "You don't have that permission!");
+		    return true;
 		}
 	    } else {
 		return false; //wrong number of operands
@@ -124,14 +126,14 @@ public final class FetchQuest extends JavaPlugin {
 			return true;
 		    }
 		} else {
-		    sender.sendMessage("You don't have that permission!");
+		    sender.sendMessage(ChatColor.RED + "You don't have that permission!");
+		    return true;
 		}
-		return false; // could not force completion
+	    } else {
+		return false; //could not force completion
 	    }
 	} else {
 	    return false; //no command matched
 	}
-	return false;
-    }
-    
+    }    
 }

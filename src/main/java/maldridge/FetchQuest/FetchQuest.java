@@ -54,6 +54,9 @@ public final class FetchQuest extends JavaPlugin {
 
 		//if the two conditions have been met, then score them for the challenge
 		if(hasItems && !alreadySolved) {
+		    if(solvedQuest.size() == 0) {
+			this.getServer().broadcastMessage("Player " + player.getName() + " has completed the quest and won the prize!");
+		    }
 		    solvedQuest.add(player.getName());
 		    player.sendMessage("You have completed the quest!");
 		}
@@ -85,20 +88,24 @@ public final class FetchQuest extends JavaPlugin {
 	} else if(cmd.getName().equalsIgnoreCase("removePlayer")) {
 	    if((args != null) && (args.length == 1)) {
 		Player target = this.getServer().getPlayer(args[0]);
-		if(target == null) {
-		    sender.sendMessage(args[0] + "is not currently online");
-		    return false;
-		} else {
-		    Iterator<String> iter = solvedQuest.iterator();
-		    while(iter.hasNext()) {
-			if(iter.next().equalsIgnoreCase(target.getName())) {
-			    iter.remove();
-			    sender.sendMessage("Successfully removed " + args[0]);
-			} else {
-			    sender.sendMessage(args[0] + " has not yet completed the challenge.");
+		if(target.hasPermission("fetchquest.removePlayer")) {
+		    if(target == null) {
+			sender.sendMessage(args[0] + "is not currently online");
+			return false;
+		    } else {
+			Iterator<String> iter = solvedQuest.iterator();
+			while(iter.hasNext()) {
+			    if(iter.next().equalsIgnoreCase(target.getName())) {
+				iter.remove();
+				sender.sendMessage("Successfully removed " + args[0]);
+				} else {
+				sender.sendMessage(args[0] + " has not yet completed the challenge.");
+			    }
 			}
-		    }
-		    return true; //checked and user was either removed or not present
+			return true; //checked and user was either removed or not present
+		    }		       
+		} else {
+		    sender.sendMessage("You don't have that permission!");
 		}
 	    } else {
 		return false; //wrong number of operands
@@ -107,19 +114,24 @@ public final class FetchQuest extends JavaPlugin {
 	} else if(cmd.getName().equalsIgnoreCase("forceCompletion")) {
 	    if((args != null) && (args.length == 1)) {
 		Player target = this.getServer().getPlayer(args[0]);
-		if(target == null) {
-		    sender.sendMessage(args[0] + "is not currently online");
-		    return false;
+		if(target.hasPermission("fetchquest.forceCompletion")) {
+		    if(target == null) {
+			sender.sendMessage(args[0] + "is not currently online");
+			return false;
+		    } else {
+			solvedQuest.add(args[0]);
+			sender.sendMessage("Force completion for " + args[0]);
+			return true;
+		    }
 		} else {
-		    solvedQuest.add(args[0]);
-		    sender.sendMessage("Force completion for " + args[0]);
-		    return true;
+		    sender.sendMessage("You don't have that permission!");
 		}
+		return false; // could not force completion
 	    }
-	    return false; // could not force completion
 	} else {
 	    return false; //no command matched
 	}
+	return false;
     }
     
 }

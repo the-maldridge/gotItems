@@ -1,8 +1,8 @@
-name: gotItems
-main: GotItem.GotItem
+name: FetchQuest
+main: maldridge.FetchQuest
 version: 0.1
 commands:
-  completeChallenge:
+  completeQuest:
     description: Attempts to complete a quest, will remove items from your inventory
     usage: "Usage: /completeChallenge"
   listCompletions:
